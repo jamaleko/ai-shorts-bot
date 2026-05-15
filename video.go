@@ -58,13 +58,6 @@ func CreateVideo() error {
   0644,
  )
 
- filter := fmt.Sprintf(
-
-  "scale=720:1280:force_original_aspect_ratio=increase,crop=720:1280,fade=t=in:st=0:d=1,fade=t=out:st=%.2f:d=1",
-
-  duration-1,
- )
-
  cmd := exec.Command(
 
   "ffmpeg",
@@ -79,7 +72,9 @@ func CreateVideo() error {
 
   "-i", "voice.mp3",
 
-  "-vf", filter,
+  "-vf",
+
+  "scale=720:1280:force_original_aspect_ratio=increase,crop=720:1280",
 
   "-vsync", "vfr",
 
