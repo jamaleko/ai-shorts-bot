@@ -15,7 +15,7 @@ func RunPipeline() error {
  script := GenerateShortScript(
   item.Title,
   //item.Description,
-  ScrapeArticle(item.Link)
+  ScrapeArticle(item.Link),
  )
 
  println("SCRIPT:")
