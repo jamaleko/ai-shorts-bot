@@ -14,6 +14,7 @@ func RunPipeline() {
 
  script := GenerateShortScript(
   item.Title,
+  item.Description,
  )
 
  println("SCRIPT:")
