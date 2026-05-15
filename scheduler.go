@@ -50,7 +50,7 @@ func StartScheduler() {
    )
 
    time.Sleep(
-    1 * time.Hour,
+    1 * time.Minute,
    )
   }
  }()
