@@ -74,7 +74,7 @@ func CreateVideo() error {
 
   "-vf",
 
-  "scale=720:1280:force_original_aspect_ratio=increase,crop=720:1280",
+  "scale=720:1280:force_original_aspect_ratio=increase,crop=720:1280,subtitles=subtitle.srt",
 
   "-vsync", "vfr",
 
