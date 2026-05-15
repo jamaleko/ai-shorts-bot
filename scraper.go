@@ -1,98 +1,54 @@
 package main
 
 import (
- "fmt"
- "os"
- "os/exec"
+ "net/http"
+ "strings"
+
+ "github.com/PuerkitoBio/goquery"
 )
 
-func CreateVideo() error {
+func ScrapeArticle(
+ url string,
+) string {
 
- duration := GetAudioDuration()
-
- println(
-  "AUDIO DURATION:",
-  fmt.Sprintf("%.2f", duration),
- )
-
- files, err := os.ReadDir(
-  "images",
+ resp, err := http.Get(
+  url,
  )
 
  if err != nil {
-  return err
+  return ""
  }
 
- imageCount := len(files)
+ defer resp.Body.Close()
 
- if imageCount == 0 {
-  return nil
+ doc, err := goquery.NewDocumentFromReader(
+  resp.Body,
+ )
+
+ if err != nil {
+  return ""
  }
 
- secondsPerImage :=
-  duration / float64(imageCount)
+ text := ""
 
- list := ""
+ doc.Find("p").Each(
+  func(i int, s *goquery.Selection) {
 
- for i := 1; i <= imageCount; i++ {
+   content := strings.TrimSpace(
+    s.Text(),
+   )
 
-  list += fmt.Sprintf(
-   "file 'images/%d.jpg'\n",
-   i,
-  )
+   if len(content) > 50 {
 
-  list += fmt.Sprintf(
-   "duration %.2f\n",
-   secondsPerImage,
-  )
+    text += content + " "
+   }
+  },
+ )
+
+ if len(text) > 800 {
+
+  text = text[:800]
  }
 
- list += fmt.Sprintf(
-  "file 'images/%d.jpg'\n",
-  imageCount,
- )
-
- os.WriteFile(
-  "slideshow.txt",
-  []byte(list),
-  0644,
- )
-
- filter := fmt.Sprintf(
-
-  "scale=720:1280:force_original_aspect_ratio=increase,crop=720:1280,fade=t=in:st=0:d=1,fade=t=out:st=%.2f:d=1",
-
-  duration-1,
- )
-
- cmd := exec.Command(
-
-  "ffmpeg",
-
-  "-y",
-
-  "-f", "concat",
-
-  "-safe", "0",
-
-  "-i", "slideshow.txt",
-
-  "-i", "voice.mp3",
-
-  "-vf", filter,
-
-  "-vsync", "vfr",
-
-  "-pix_fmt", "yuv420p",
-
-  "-c:v", "libx264",
-
-  "-c:a", "aac",
-
-  "-shortest",
-
-  "video.mp4",
- )
-
- return cmd.Run()
+ return text
 }
