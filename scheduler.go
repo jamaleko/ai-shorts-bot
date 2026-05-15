@@ -9,7 +9,7 @@ func StartScheduler() {
  go func() {
 
   ticker := time.NewTicker(
-   5 * time.Second,
+   120 * time.Second,
   )
 
   defer ticker.Stop()
