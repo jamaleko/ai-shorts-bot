@@ -20,7 +20,7 @@ func CreateVideo() error {
 
   "-vf",
 
-  "scale=720:1280:force_original_aspect_ratio=decrease,pad=720:1280:(ow-iw)/2:(oh-ih)/2",
+  "scale=720:1280:force_original_aspect_ratio=decrease,pad=720:1280:(ow-iw)/2:(oh-ih)/2:black",
 
   "-c:v", "libx264",
 
