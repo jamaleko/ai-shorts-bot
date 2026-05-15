@@ -47,7 +47,7 @@ func ScrapeArticle(
 
  if len(text) > 800 {
 
-  text = text[:1000]
+  text = text[:800]
  }
 
  return text
