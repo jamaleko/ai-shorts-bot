@@ -10,7 +10,7 @@ func CleanHTML(
 ) string {
 
  re := regexp.MustCompile(
-  <[^>]*>,
+  `<[^>]*>`,
  )
 
  clean := re.ReplaceAllString(
