@@ -1,7 +1,7 @@
 package main
 
 func RunPipeline() error {
-
+ CleanFiles()
  item, err := GetNews()
 
  if err != nil {
