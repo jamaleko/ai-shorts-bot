@@ -47,6 +47,11 @@ func CreateVideo() error {
   )
  }
 
+ list += fmt.Sprintf(
+  "file 'images/%d.jpg'\n",
+  imageCount,
+ )
+
  os.WriteFile(
   "slideshow.txt",
   []byte(list),
@@ -69,11 +74,13 @@ func CreateVideo() error {
 
   "-vf",
 
-  "scale=900:1600:force_original_aspect_ratio=increase,crop=720:1280,zoompan=z='min(zoom+0.0008,1.3)':d=125:s=720x1280",
+  "scale=720:1280:force_original_aspect_ratio=increase,crop=720:1280",
 
-  "-c:v", "libx264",
+  "-vsync", "vfr",
 
   "-pix_fmt", "yuv420p",
+
+  "-c:v", "libx264",
 
   "-c:a", "aac",
 
