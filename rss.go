@@ -1,10 +1,10 @@
 package main
 
 import (
- "encoding/xml"
+ //"encoding/xml"
  "fmt"
  "math/rand"
- "net/http"
+ //"net/http"
 
  "github.com/mmcdole/gofeed"
 )
