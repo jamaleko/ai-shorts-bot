@@ -1,13 +1,13 @@
 package main
 
-func RunPipeline() {
+func RunPipeline() error {
 
  item, err := GetNews()
 
  if err != nil {
 
   println("RSS ERROR:", err.Error())
-  return
+  return err
  }
 
  println("NEWS:", item.Title)
@@ -32,7 +32,7 @@ func RunPipeline() {
    err.Error(),
   )
  
-  return
+  return err
  }
 err = DownloadImages()
 
@@ -43,7 +43,7 @@ if err != nil {
   err.Error(),
  )
 
- return
+ return err
 }
 
 println("IMAGE DOWNLOADED")
@@ -56,7 +56,7 @@ if err != nil {
   err.Error(),
  )
 
- return
+ return err
 }
 
 println("VIDEO CREATED")
@@ -64,4 +64,5 @@ println("VIDEO CREATED")
  // generate suara
  // render video
  // upload youtube
+ return nil
 }
