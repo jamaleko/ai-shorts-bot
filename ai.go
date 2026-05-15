@@ -1,13 +1,25 @@
 package main
 
-import "fmt"
-
+import (
+ "fmt"
+ "regexp"
+ )
+func CleanHTML(text string) string {
+ re := regexp.MustCompile(`<[^>]*>`)
+ return re.ReplaceAllString(
+  text,
+  "",
+  )
+}
 func GenerateShortScript(title string, description string) string {
-
+cleanDesc := CleanHTML(
+ description,
+ )
+ 
  script := fmt.Sprintf(
   "%s. %s",
   title,
-  description,
+  cleanDesc,
  )
 
  return script
