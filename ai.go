@@ -2,11 +2,12 @@ package main
 
 import "fmt"
 
-func GenerateShortScript(title string) string {
+func GenerateShortScript(title string, description string) string {
 
  script := fmt.Sprintf(
-  "Breaking news! %s",
+  "%s. %s",
   title,
+  description,
  )
 
  return script
