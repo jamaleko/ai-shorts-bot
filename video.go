@@ -2,7 +2,6 @@ package main
 
 import (
  "fmt"
- "os"
  "os/exec"
 )
 
@@ -15,47 +14,28 @@ func CreateVideo() error {
   fmt.Sprintf("%.2f", duration),
  )
 
- files, err := os.ReadDir(
-  "images",
- )
-
- if err != nil {
-  return err
- }
-
- imageCount := len(files)
-
- if imageCount == 0 {
-  return nil
- }
-
  secondsPerImage :=
-  duration / float64(imageCount)
+  duration / 5.0
 
- list := ""
+ filter := fmt.Sprintf(
 
- for i := 1; i <= imageCount; i++ {
+[0:v]scale=720:1280:force_original_aspect_ratio=increase,crop=720:1280[v0];
+[1:v]scale=720:1280:force_original_aspect_ratio=increase,crop=720:1280[v1];
+[2:v]scale=720:1280:force_original_aspect_ratio=increase,crop=720:1280[v2];
+[3:v]scale=720:1280:force_original_aspect_ratio=increase,crop=720:1280[v3];
+[4:v]scale=720:1280:force_original_aspect_ratio=increase,crop=720:1280[v4];
 
-  list += fmt.Sprintf(
-   "file 'images/%d.jpg'\n",
-   i,
-  )
+[v0][v1]xfade=transition=fade:duration=1:offset=%.2f[f1];
+[f1][v2]xfade=transition=fade:duration=1:offset=%.2f[f2];
+[f2][v3]xfade=transition=fade:duration=1:offset=%.2f[f3];
+[f3][v4]xfade=transition=fade:duration=1:offset=%.2f[outv]
 
-  list += fmt.Sprintf(
-   "duration %.2f\n",
-   secondsPerImage,
-  )
- }
+,
 
- list += fmt.Sprintf(
-  "file 'images/%d.jpg'\n",
-  imageCount,
- )
-
- os.WriteFile(
-  "slideshow.txt",
-  []byte(list),
-  0644,
+  secondsPerImage-1,
+  (secondsPerImage*2)-1,
+  (secondsPerImage*3)-1,
+  (secondsPerImage*4)-1,
  )
 
  cmd := exec.Command(
@@ -64,19 +44,34 @@ func CreateVideo() error {
 
   "-y",
 
-  "-f", "concat",
+  "-loop", "1",
+  "-t", fmt.Sprintf("%.2f", secondsPerImage),
+  "-i", "images/1.jpg",
 
-  "-safe", "0",
+  "-loop", "1",
+  "-t", fmt.Sprintf("%.2f", secondsPerImage),
+  "-i", "images/2.jpg",
 
-  "-i", "slideshow.txt",
+  "-loop", "1",
+  "-t", fmt.Sprintf("%.2f", secondsPerImage),
+  "-i", "images/3.jpg",
+
+  "-loop", "1",
+  "-t", fmt.Sprintf("%.2f", secondsPerImage),
+  "-i", "images/4.jpg",
+
+  "-loop", "1",
+  "-t", fmt.Sprintf("%.2f", secondsPerImage),
+  "-i", "images/5.jpg",
 
   "-i", "voice.mp3",
 
-  "-vf",
+  "-filter_complex",
+  filter,
 
-  "scale=720:1280:force_original_aspect_ratio=increase,crop=720:1280",
+  "-map", "[outv]",
 
-  "-vsync", "vfr",
+  "-map", "5:a",
 
   "-pix_fmt", "yuv420p",
 
