@@ -16,11 +16,11 @@ type FeedItem struct {
 }
 
 type SitemapURL struct {
- Loc string xml:"loc"
+ Loc string `xml:"loc"`
 }
 
 type Sitemap struct {
- URLs []SitemapURL xml:"url"
+ URLs []SitemapURL `xml:"url"`
 }
 
 func GetNews() (*FeedItem, error) {
