@@ -48,6 +48,24 @@ if err != nil {
 }
 
 println("IMAGE DOWNLOADED")
+
+ duration := GetAudioDuration()
+
+err = CreateSubtitle(
+ script,
+ duration,
+)
+
+if err != nil {
+
+ println(
+  "SUBTITLE ERROR:",
+  err.Error(),
+ )
+
+ return err
+}
+ 
  err = CreateVideo()
 
 if err != nil {
