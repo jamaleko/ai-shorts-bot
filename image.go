@@ -1,11 +1,21 @@
 package main
 
 import (
+ "encoding/json"
  "fmt"
  "io"
+ "math/rand"
  "net/http"
  "os"
 )
+
+type PexelsResponse struct {
+ Photos []struct {
+  Src struct {
+   Large2x string json:"large2x"
+  } json:"src"
+ } json:"photos"
+}
 
 func DownloadImages() error {
 
@@ -14,18 +24,64 @@ func DownloadImages() error {
   0755,
  )
 
- for i := 1; i <= 10; i++ {
+ apiKey :=
+  "30FotNwVR913zSW6xDg2pZfxxATXxESMxSeKjGnIWyaHB6KCDnoOy09c"
 
-  url :=
-   "https://loremflickr.com/720/1280/space"
+ req, err := http.NewRequest(
+  "GET",
+  "https://api.pexels.com/v1/search?query=space&per_page=30",
+  nil,
+ )
 
-  resp, err := http.Get(url)
+ if err != nil {
+  return err
+ }
+
+ req.Header.Set(
+  "Authorization",
+  apiKey,
+ )
+
+ client := &http.Client{}
+
+ resp, err := client.Do(req)
+
+ if err != nil {
+  return err
+ }
+
+ defer resp.Body.Close()
+
+ var data PexelsResponse
+
+ err = json.NewDecoder(
+  resp.Body,
+ ).Decode(&data)
+
+ if err != nil {
+  return err
+ }
+
+ for i := 1; i <= 30; i++ {
+
+  randomIndex := rand.Intn(
+   len(data.Photos),
+  )
+
+  imageURL :=
+   data.Photos[randomIndex].
+    Src.
+    Large2x
+
+  imgResp, err := http.Get(
+   imageURL,
+  )
 
   if err != nil {
    return err
   }
 
-  defer resp.Body.Close()
+  defer imgResp.Body.Close()
 
   filename := fmt.Sprintf(
    "images/%d.jpg",
@@ -42,7 +98,7 @@ func DownloadImages() error {
 
   _, err = io.Copy(
    file,
-   resp.Body,
+   imgResp.Body,
   )
 
   file.Close()
