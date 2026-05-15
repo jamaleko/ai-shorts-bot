@@ -62,7 +62,7 @@ func DownloadImages() error {
   return err
  }
 
- for i := 1; i <= 30; i++ {
+ for i := 1; i <= 5; i++ {
 
   randomIndex := rand.Intn(
    len(data.Photos),
