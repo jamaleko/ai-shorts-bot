@@ -30,6 +30,20 @@ func RunPipeline() {
  
   return
  }
+
+ err = CreateVideo()
+
+if err != nil {
+
+ println(
+  "VIDEO ERROR:",
+  err.Error(),
+ )
+
+ return
+}
+
+println("VIDEO CREATED")
  // nanti:
  // generate suara
  // render video
