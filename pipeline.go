@@ -18,7 +18,17 @@ func RunPipeline() {
 
  println("SCRIPT:")
  println(script)
-
+ err = GenerateTTS(script)
+ 
+ if err != nil {
+ 
+  println(
+   "TTS ERROR:",
+   err.Error(),
+  )
+ 
+  return
+ }
  // nanti:
  // generate suara
  // render video
