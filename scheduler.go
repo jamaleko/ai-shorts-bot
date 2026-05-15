@@ -6,23 +6,52 @@ import (
 
 func StartScheduler() {
 
+ println(
+  "SCHEDULER STARTED",
+ )
+
  go func() {
-
-  ticker := time.NewTicker(
-   60 * time.Second,
-  )
-
-  defer ticker.Stop()
-
-  println("SCHEDULER STARTED")
 
   for {
 
-   <-ticker.C
+   println(
+    "PROCESS START",
+   )
 
-   println("PROCESS START")
+   success := false
 
-   RunPipeline()
+   for !success {
+
+    err := RunPipeline()
+
+    if err != nil {
+
+     println(
+      "PIPELINE ERROR:",
+      err.Error(),
+     )
+
+     println(
+      "RETRY 3 DETIK...",
+     )
+
+     time.Sleep(
+      3 * time.Second,
+     )
+
+     continue
+    }
+
+    success = true
+   }
+
+   println(
+    "WAIT NEXT SCHEDULE",
+   )
+
+   time.Sleep(
+    1 * time.Hour,
+   )
   }
  }()
 }
