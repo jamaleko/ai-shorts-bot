@@ -12,9 +12,9 @@ import (
 type PexelsResponse struct {
  Photos []struct {
   Src struct {
-   Large2x string json:"large2x"
-  } json:"src"
- } json:"photos"
+   Large2x string `json:"large2x"`
+  } `json:"src"`
+ } `json:"photos"`
 }
 
 func DownloadImages() error {
