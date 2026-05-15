@@ -115,5 +115,9 @@ func GetNews() (*FeedItem, error) {
 
  item := allItems[randIndex]
 
- return &item, nil
+ return &FeedItem{
+  Title: item.Title,
+  Link: item.Link,
+  Description: item.Description,
+ }, nil
 }
