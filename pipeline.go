@@ -19,10 +19,10 @@ func RunPipeline() {
 
  println("SCRIPT:")
  println(script)
- /*translated := TranslateToIndonesia(
+ translated := TranslateToIndonesia(
   script,
   )
- script = translated*/
+ script = translated
  err = GenerateTTS(script)
  
  if err != nil {
