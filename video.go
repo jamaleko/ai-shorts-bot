@@ -20,7 +20,7 @@ func CreateVideo() error {
 
   "-vf",
 
-  "scale=900:1600:force_original_aspect_ratio=increase,crop=720:1280,zoompan=z='min(zoom+0.0015,1.5)':d=125:s=720x1280",
+  "scale=900:1600:force_original_aspect_ratio=increase,crop=720:1280,zoompan=z='min(zoom+0.0015,1.5)':d=250:s=720x1280",
 
   "-c:v", "libx264",
 
