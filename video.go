@@ -9,23 +9,24 @@ func CreateVideo() error {
  cmd := exec.Command(
 
   "ffmpeg",
+
   "-y",
 
-  "-loop", "1",
+  "-framerate", "1/3",
 
-  "-i", "thumbnail.jpg",
+  "-i", "images/%d.jpg",
 
   "-i", "voice.mp3",
 
+  "-vf",
+
+  "scale=720:1280,zoompan=z='min(zoom+0.0015,1.5)':d=125",
+
   "-c:v", "libx264",
 
-  "-tune", "stillimage",
+  "-pix_fmt", "yuv420p",
 
   "-c:a", "aac",
-
-  "-b:a", "192k",
-
-  "-pix_fmt", "yuv420p",
 
   "-shortest",
 
