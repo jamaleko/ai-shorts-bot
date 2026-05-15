@@ -68,7 +68,7 @@ func GetNews() (*FeedItem, error) {
  // SITEMAP KOMPAS
  // ====================
 
- sitemapURL :=
+ /*sitemapURL :=
   "https://www.kompas.com/sitemap-news-sains.xml"
 
  resp, err := http.Get(sitemapURL)
@@ -92,7 +92,7 @@ func GetNews() (*FeedItem, error) {
     },
    )
   }
- }
+ }*/
 
  // ====================
  // EMPTY CHECK
