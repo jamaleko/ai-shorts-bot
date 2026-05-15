@@ -17,7 +17,7 @@ func CreateVideo() error {
  secondsPerImage :=
   duration / 5.0
 
- filter := fmt.Sprintf(
+ filter := fmt.Sprintf(`
 
 [0:v]scale=720:1280:force_original_aspect_ratio=increase,crop=720:1280[v0];
 [1:v]scale=720:1280:force_original_aspect_ratio=increase,crop=720:1280[v1];
@@ -30,7 +30,7 @@ func CreateVideo() error {
 [f2][v3]xfade=transition=fade:duration=1:offset=%.2f[f3];
 [f3][v4]xfade=transition=fade:duration=1:offset=%.2f[outv]
 
-,
+`,
 
   secondsPerImage-1,
   (secondsPerImage*2)-1,
