@@ -9,6 +9,7 @@ func CreateVideo() error {
  cmd := exec.Command(
 
   "ffmpeg",
+  "-y",
 
   "-loop", "1",
 
