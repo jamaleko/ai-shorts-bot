@@ -15,8 +15,8 @@ func GenerateShortScript(title string, description string) string {
 cleanDesc := CleanHTML(
  description,
  )
- if len(cleanDesc) > 150 {
-  cleanDesc = cleanDesc[:150]
+ if len(cleanDesc) > 500 {
+  cleanDesc = cleanDesc[:500]
   }
  script := fmt.Sprintf(
   "%s. %s",
