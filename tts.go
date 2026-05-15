@@ -1,26 +1,21 @@
 package main
 
 import (
- "os"
-
- htgotts "github.com/hegedustibor/htgo-tts"
+ "os/exec"
 )
 
-func GenerateTTS(text string) error {
+func GenerateTTS(
+ text string,
+) error {
 
- speech := htgotts.Speech{
-  Folder:   ".",
-  Language: "en",
- }
+ cmd := exec.Command(
 
- speech.Speak(
+  "python3",
+
+  "tts.py",
+
   text,
-  "voice",
  )
 
- _, err := os.Stat(
-  "voice.mp3",
- )
-
- return err
+ return cmd.Run()
 }
