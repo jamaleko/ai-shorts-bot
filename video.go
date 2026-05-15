@@ -2,6 +2,7 @@ package main
 
 import (
  "fmt"
+ "os"
  "os/exec"
 )
 
@@ -14,21 +15,61 @@ func CreateVideo() error {
   fmt.Sprintf("%.2f", duration),
  )
 
+ files, err := os.ReadDir(
+  "images",
+ )
+
+ if err != nil {
+  return err
+ }
+
+ imageCount := len(files)
+
+ if imageCount == 0 {
+  return nil
+ }
+
+ secondsPerImage :=
+  duration / float64(imageCount)
+
+ list := ""
+
+ for i := 1; i <= imageCount; i++ {
+
+  list += fmt.Sprintf(
+   "file 'images/%d.jpg'\n",
+   i,
+  )
+
+  list += fmt.Sprintf(
+   "duration %.2f\n",
+   secondsPerImage,
+  )
+ }
+
+ os.WriteFile(
+  "slideshow.txt",
+  []byte(list),
+  0644,
+ )
+
  cmd := exec.Command(
 
   "ffmpeg",
 
   "-y",
 
-  "-framerate", "1.0/15.0",
+  "-f", "concat",
 
-  "-i", "images/%d.jpg",
+  "-safe", "0",
+
+  "-i", "slideshow.txt",
 
   "-i", "voice.mp3",
 
   "-vf",
 
-  "scale=900:1600:force_original_aspect_ratio=increase,crop=720:1280,zoompan=z='min(zoom+0.0008,1.3)':d=375:s=720x1280",
+  "scale=900:1600:force_original_aspect_ratio=increase,crop=720:1280,zoompan=z='min(zoom+0.0008,1.3)':d=125:s=720x1280",
 
   "-c:v", "libx264",
 
@@ -36,11 +77,7 @@ func CreateVideo() error {
 
   "-c:a", "aac",
 
-  "-t",
-  fmt.Sprintf(
-   "%.0f",
-   duration,
-  ),
+  "-shortest",
 
   "video.mp4",
  )
