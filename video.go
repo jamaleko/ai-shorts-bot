@@ -2,6 +2,7 @@ package main
 
 import (
  "fmt"
+ "os"
  "os/exec"
 )
 
@@ -14,7 +15,23 @@ func CreateVideo() error {
   fmt.Sprintf("%.2f", duration),
  )
 
- frames := int(duration * 25)
+ files, err := os.ReadDir(
+  "images",
+ )
+
+ if err != nil {
+  return err
+ }
+
+ imageCount := len(files)
+
+ if imageCount == 0 {
+  return nil
+ }
+
+ secondsPerImage := duration / float64(imageCount)
+
+ frames := int(secondsPerImage * 25)
 
  filter := fmt.Sprintf(
 
@@ -29,7 +46,7 @@ func CreateVideo() error {
 
   "-y",
 
-  "-framerate", "1/3",
+  "-framerate", "1",
 
   "-i", "images/%d.jpg",
 
