@@ -34,7 +34,19 @@ func RunPipeline() {
  
   return
  }
+err = DownloadImages()
 
+if err != nil {
+
+ println(
+  "IMAGE ERROR:",
+  err.Error(),
+ )
+
+ return
+}
+
+println("IMAGE DOWNLOADED")
  err = CreateVideo()
 
 if err != nil {
