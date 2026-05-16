@@ -150,7 +150,7 @@ func tokenFromFile(
 // optional test route
 func TestUpload() {
 
- err := UploadToYouTube(
+ err := UploadYouTubeVideo(
   "video.mp4",
   "AI Shorts Test",
   "Upload otomatis dari AI Shorts Bot",
