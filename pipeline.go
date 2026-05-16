@@ -79,6 +79,23 @@ if err != nil {
 }
 
 println("VIDEO CREATED")
+ err = UploadYouTubeVideo(
+ item.Title,
+ script,
+ "video.mp4",
+)
+
+if err != nil {
+
+ println(
+  "YOUTUBE ERROR:",
+  err.Error(),
+ )
+
+ return err
+}
+
+println("YOUTUBE UPLOADED")
  // nanti:
  // generate suara
  // render video
