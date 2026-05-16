@@ -83,5 +83,6 @@ println("VIDEO CREATED")
  // generate suara
  // render video
  // upload youtube
+ CleanFiles()
  return nil
 }
