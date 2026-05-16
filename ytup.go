@@ -2,69 +2,130 @@ package main
 
 import (
  "context"
+ "encoding/json"
  "fmt"
  "net/http"
  "os"
- "encoding/json"
 
  "golang.org/x/oauth2"
  "golang.org/x/oauth2/google"
-
  "google.golang.org/api/option"
  "google.golang.org/api/youtube/v3"
 )
 
-func GetClient(
- config *oauth2.Config,
-) *http.Client {
+func UploadToYouTube(
+ videoPath string,
+ title string,
+ description string,
+) error {
 
- tokFile := "token.json"
+ ctx := context.Background()
 
- tok, err := tokenFromFile(tokFile)
+ // ====================
+ // READ CREDENTIALS
+ // ====================
+
+ b, err := os.ReadFile(
+  "credentials.json",
+ )
 
  if err != nil {
-
-  tok = getTokenFromWeb(config)
-
-  saveToken(tokFile, tok)
+  return err
  }
 
- return config.Client(
-  context.Background(),
+ config, err := google.ConfigFromJSON(
+  b,
+  youtube.YoutubeUploadScope,
+ )
+
+ if err != nil {
+  return err
+ }
+
+ // ====================
+ // LOAD TOKEN
+ // ====================
+
+ tok, err := tokenFromFile(
+  "token.json",
+ )
+
+ if err != nil {
+  return err
+ }
+
+ client := config.Client(
+  ctx,
   tok,
  )
-}
 
-func getTokenFromWeb(
- config *oauth2.Config,
-) *oauth2.Token {
+ // ====================
+ // YOUTUBE SERVICE
+ // ====================
 
- authURL := config.AuthCodeURL(
-  "state-token",
-  oauth2.AccessTypeOffline,
- )
-
- fmt.Println(
-  "OPEN THIS URL:",
-  authURL,
- )
-
- var code string
-
- fmt.Print("ENTER CODE: ")
-
- fmt.Scan(&code)
-
- tok, err := config.Exchange(
-  context.Background(),
-  code,
+ service, err := youtube.NewService(
+  ctx,
+  option.WithHTTPClient(client),
  )
 
  if err != nil {
-  panic(err)
+  return err
  }
 
- return tok
+ // ====================
+ // OPEN VIDEO
+ // ====================
+
+ file, err := os.Open(videoPath)
+
+ if err != nil {
+  return err
+ }
+
+ defer file.Close()
+
+ // ====================
+ // VIDEO OBJECT
+ // ====================
+
+ video := &youtube.Video{
+  Snippet: &youtube.VideoSnippet{
+   Title:       title,
+   Description: description,
+   CategoryId:  "28",
+  },
+
+  Status: &youtube.VideoStatus{
+   PrivacyStatus: "public",
+  },
+ }
+
+ // ====================
+ // UPLOAD
+ // ====================
+
+ call := service.Videos.Insert(
+  []string{
+   "snippet",
+   "status",
+  },
+  video,
+ )
+
+ response, err := call.Media(
+  file,
+ ).Do()
+
+ if err != nil {
+  return err
+ }
+
+ fmt.Println(
+  "YOUTUBE SUCCESS:",
+  response.Id,
+ )
+
+ return nil
 }
 
 func tokenFromFile(
@@ -86,90 +147,24 @@ func tokenFromFile(
  return tok, err
 }
 
-func saveToken(
- path string,
- token *oauth2.Token,
-) {
+// optional test route
+func TestUpload() {
 
- f, _ := os.Create(path)
-
- defer f.Close()
-
- json.NewEncoder(f).Encode(token)
-}
-
-func UploadYouTubeVideo(
- title string,
- description string,
- videoPath string,
-) error {
-
- b, err := os.ReadFile(
-  "credentials.json",
+ err := UploadToYouTube(
+  "video.mp4",
+  "AI Shorts Test",
+  "Upload otomatis dari AI Shorts Bot",
  )
 
  if err != nil {
-  return err
+
+  println(
+   "UPLOAD ERROR:",
+   err.Error(),
+  )
+
+  return
  }
 
- config, err := google.ConfigFromJSON(
-  b,
-  youtube.YoutubeUploadScope,
- )
-
- if err != nil {
-  return err
- }
-
- client := GetClient(config)
-
- service, err := youtube.NewService(
-  context.Background(),
-  option.WithHTTPClient(client),
- )
-
- if err != nil {
-  return err
- }
-
- video := &youtube.Video{
-  Snippet: &youtube.VideoSnippet{
-   Title:       title,
-   Description: description,
-   CategoryId:  "28",
-  },
-
-  Status: &youtube.VideoStatus{
-   PrivacyStatus: "public",
-  },
- }
-
- file, err := os.Open(videoPath)
-
- if err != nil {
-  return err
- }
-
- defer file.Close()
-
- call := service.Videos.Insert(
-  []string{
-   "snippet",
-   "status",
-  },
-  video,
- )
-
- response, err := call.Media(file).Do()
-
- if err != nil {
-  return err
- }
-
- fmt.Println(
-  "YOUTUBE VIDEO ID:",
-  response.Id,
- )
-
- return nil
+ println("UPLOAD SUCCESS")
 }
