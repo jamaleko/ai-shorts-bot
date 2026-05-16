@@ -9,7 +9,12 @@ func RunPipeline() error {
   println("RSS ERROR:", err.Error())
   return err
  }
+if IsAlreadyPosted(item.Link) {
 
+ println("SKIP DUPLICATE")
+
+ return nil
+}
  println("NEWS:", item.Title)
 
  script := GenerateShortScript(
@@ -96,6 +101,7 @@ if err != nil {
 }
 
 println("YOUTUBE UPLOADED")
+ SavePostedLink(item.Link)
  // nanti:
  // generate suara
  // render video
