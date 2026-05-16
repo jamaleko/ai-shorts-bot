@@ -4,7 +4,7 @@ import (
  "context"
  "encoding/json"
  "fmt"
- "net/http"
+ //"net/http"
  "os"
 
  "golang.org/x/oauth2"
@@ -13,7 +13,7 @@ import (
  "google.golang.org/api/youtube/v3"
 )
 
-func UploadToYouTube(
+func UploadYouTubeVideo(
  videoPath string,
  title string,
  description string,
