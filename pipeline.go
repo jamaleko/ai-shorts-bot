@@ -80,9 +80,9 @@ if err != nil {
 
 println("VIDEO CREATED")
  err = UploadYouTubeVideo(
+ "video.mp4",
  item.Title,
  script,
- "video.mp4",
 )
 
 if err != nil {
