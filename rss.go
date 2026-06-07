@@ -32,9 +32,9 @@ func GetNews() (*FeedItem, error) {
  // ====================
 
  rssFeeds := []string{
-    "https://www.cnnindonesia.com/teknologi/rss",
-  "https://inet.detik.com/rss",
-
+   // "https://www.cnnindonesia.com/teknologi/rss",
+  //"https://inet.detik.com/rss",
+  "https://www.space.com/feeds.xml",
   //"https://www.nasa.gov/news-release/feed/",
  }
 
