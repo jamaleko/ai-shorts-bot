@@ -54,7 +54,7 @@ if err != nil {
 
 println("IMAGE DOWNLOADED")
 
- duration := GetAudioDuration()
+// duration := GetAudioDuration()
 
 /*err = CreateSubtitle(
  script,
