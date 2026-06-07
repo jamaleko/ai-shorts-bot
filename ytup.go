@@ -61,7 +61,7 @@ if err != nil {
     return err
 }
 
-saveToken("token.json", tok)
+saveToken("token.json", toke)
 
 fmt.Println("TOKEN SAVED")
 return nil
@@ -69,7 +69,7 @@ return nil
  // LOAD TOKEN
  // ====================
 
- tok, err := tokenFromFile(
+ toke, err := tokenFromFile(
   "token.json",
  )
 
