@@ -41,7 +41,12 @@ func UploadYouTubeVideo(
  if err != nil {
   return err
  }
-
+fmt.Println(
+    config.AuthCodeURL(
+        "state-token",
+        oauth2.AccessTypeOffline,
+    ),
+)
  // ====================
  // LOAD TOKEN
  // ====================
