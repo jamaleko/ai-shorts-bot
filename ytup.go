@@ -41,12 +41,30 @@ func UploadYouTubeVideo(
  if err != nil {
   return err
  }
-fmt.Println(
-    config.AuthCodeURL(
-        "state-token",
-        oauth2.AccessTypeOffline,
-    ),
+fmt.Println("LOGIN URL:")
+fmt.Println(config.AuthCodeURL(
+    "state-token",
+    oauth2.AccessTypeOffline,
+))
+
+fmt.Print("\nPaste Code: ")
+
+var code string
+fmt.Scan(&code)
+
+tok, err := config.Exchange(
+    context.Background(),
+    code,
 )
+
+if err != nil {
+    return err
+}
+
+saveToken("token.json", tok)
+
+fmt.Println("TOKEN SAVED")
+return nil
  // ====================
  // LOAD TOKEN
  // ====================
@@ -151,7 +169,16 @@ func tokenFromFile(
 
  return tok, err
 }
+func saveToken(path string, token *oauth2.Token) error {
 
+    f, err := os.Create(path)
+    if err != nil {
+        return err
+    }
+    defer f.Close()
+
+    return json.NewEncoder(f).Encode(token)
+}
 // optional test route
 func TestUpload() {
 
