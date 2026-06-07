@@ -8,7 +8,8 @@ async def main():
 
     communicate = edge_tts.Communicate(
         TEXT,
-        "id-ID-GadisNeural"
+        //"id-ID-GadisNeural"
+        "en-US-AriaNeural"
     )
 
     await communicate.save("voice.mp3")
