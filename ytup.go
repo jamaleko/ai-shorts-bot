@@ -41,7 +41,7 @@ func UploadYouTubeVideo(
  if err != nil {
   return err
  }
-fmt.Println("LOGIN URL:")
+/*fmt.Println("LOGIN URL:")
 fmt.Println(config.AuthCodeURL(
     "state-token",
     oauth2.AccessTypeOffline,
@@ -64,18 +64,18 @@ if err != nil {
 saveToken("token.json", tok)
 
 fmt.Println("TOKEN SAVED")
-return nil
+return nil*/
  // ====================
  // LOAD TOKEN
  // ====================
 
- /*tok, err := tokenFromFile(
+ tok, err := tokenFromFile(
   "token.json",
  )
 
  if err != nil {
   return err
- }*/
+ }
 
  client := config.Client(
   ctx,
