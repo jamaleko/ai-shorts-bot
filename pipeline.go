@@ -56,7 +56,7 @@ println("IMAGE DOWNLOADED")
 
  duration := GetAudioDuration()
 
-err = CreateSubtitle(
+/*err = CreateSubtitle(
  script,
  duration,
 )
@@ -69,7 +69,7 @@ if err != nil {
  )
 
  return err
-}
+}*/
  
  err = CreateVideo()
 
